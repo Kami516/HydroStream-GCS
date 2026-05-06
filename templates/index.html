@@ -45,9 +45,34 @@
             const now = new Date().toLocaleTimeString();
             const message = event.data;
             
+            const lines = message.split('\n');
             const entry = document.createElement('div');
             entry.className = 'log-entry';
-            entry.innerHTML = `<span class="timestamp">[${now}]</span> ${message}`;
+
+            const timeStamp = document.createElement('span');
+            timeStamp.className = 'timestamp';
+            timeStamp.textContent = `[${now}]`;
+            entry.appendChild(timeStamp);
+
+            lines.forEach((line, index) => {
+                const lineEl = document.createElement('span');
+                lineEl.className = 'log-line';
+
+                if (index === 0) {
+                    lineEl.classList.add('header');
+                } else if (line.startsWith('Zespół:')) {
+                    lineEl.classList.add('team');
+                } else if (line.startsWith('Basen:')) {
+                    lineEl.classList.add('pool');
+                } else if (line.startsWith('pH:')) {
+                    lineEl.classList.add('metrics');
+                } else if (line.startsWith('Status:')) {
+                    lineEl.classList.add('status');
+                }
+
+                lineEl.textContent = line;
+                entry.appendChild(lineEl);
+            });
             
             terminal.appendChild(entry);
             
