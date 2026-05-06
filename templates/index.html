@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drone Mission Control - Logs</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>DRONE MISSION CONTROL</h1>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="video-section">
+                    <h2>Live Camera Feed</h2>
+                    <div id="video-stream" class="video-placeholder">Live Stream (Integration Pending)</div>
+                </div>
+                
+                <div class="images-section">
+                    <h2>Transmitted Images</h2>
+                    <div id="images-grid" class="images-grid">
+                        <div class="image-placeholder">Image 1</div>
+                        <div class="image-placeholder">Image 2</div>
+                        <div class="image-placeholder">Image 3</div>
+                        <div class="image-placeholder">Image 4</div>
+                        <div class="image-placeholder">Image 5</div>
+                        <div class="image-placeholder">Image 6</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <h2>Live Logs</h2>
+                <div id="terminal"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        // Connect to the FastAPI WebSocket
+        const ws = new WebSocket(`ws://${window.location.host}/ws`);
+
+        ws.onmessage = function(event) {
+            const now = new Date().toLocaleTimeString();
+            const message = event.data;
+            
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="timestamp">[${now}]</span> ${message}`;
+            
+            terminal.appendChild(entry);
+            
+            // Auto-scroll to bottom
+            terminal.scrollTop = terminal.scrollHeight;
+        };
+
+        ws.onclose = function() {
+            const entry = document.createElement('div');
+            entry.style.color = '#ff6b6b';
+            entry.innerHTML = "SYSTEM: Connection lost. Reconnecting...";
+            terminal.appendChild(entry);
+        };
+    </script>
+</body>
+</html>
