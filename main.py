@@ -7,7 +7,6 @@ from typing import List
 
 app = FastAPI()
 
-# Mount static files from templates folder
 app.mount("/static", StaticFiles(directory="templates"), name="static")
 
 # Configuration

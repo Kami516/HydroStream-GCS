@@ -23,10 +23,8 @@ report_counter = 0
 
 try:
     while report_counter < len(reports_data):
-        # Get current time
         current_time = datetime.now()
-        
-        # Select report data
+
         data = reports_data[report_counter]
         
         # Generate report
@@ -48,7 +46,6 @@ try:
         report_counter += 1
         
         if report_counter < len(reports_data):
-            # Wait 1 second before next report
             time.sleep(1)
 
     print("All 6 reports sent.")
